@@ -1,0 +1,95 @@
+- Booleans
+tv t.
+tv f.
+
+non t f.
+non f t.
+
+and t X X :- tv X.
+and f X f :- tv X.
+
+or f X X :- tv X.
+or t X t :- tv X.
+
+- Negation
+not X :- X, !, fail.
+not X.
+
+- Lifting
+lift X t :- X.
+lift X f :- not X.
+
+- Comparison
+cmp 0 0 eq.
+cmp 0 (s X) lt.
+cmp (s X) 0 gt.
+cmp (s X) (s Y) Z :- cmp X Y Z.
+
+- Arithmetic
+even 0 :- !.
+even (s X) :- odd X.
+
+odd 1 :- !.
+odd (s X) :- even X.
+
+sub 0 (s X) 0.
+sub X 0 X.
+sub (s X) (s Y) Z :- sub X Y Z.
+-sub X Y Z :- add Y Z X.
+
+add 0 X X.
+add (s X) Y (s Z) :- add X Y Z.
+
+-div X Y Z :- mul Y Z X.
+
+mul 0 X 0.
+mul (s Y) X Z :- mul Y X W, add X W Z.
+
+exp 0 X (s 0).
+exp (s X) Y Z :- exp X Y W, mul Y W Z.
+
+- Lists
+rev X Y :- rev' X [] Y.
+rev' [] X X.
+rev' [X:Y] W Z :- rev' Y [X:W] Z.
+
+mem X [X:Y].
+mem X [Z:Y] :- mem X Y.
+
+append [] X X.
+append [X:Y] Z [X:W] :- append Y Z W.
+
+at 0 [X:Y] X.
+at (s Z) [X:Y] V :- at Z Y V.
+
+length [] 0.
+length [H:T] (s X) :- length T X.
+
+map X [] [].
+map X [Y:Z] [Y':Z'] :- X Y Y', map X Z Z'.
+
+foldr X Y [] Y.
+foldr X Y [Z:Z'] W' :- foldr X Y Z' W, X Z W W'.
+
+concat X Y :- foldr append [] X Y.
+
+sum X Y :- foldr add 0 X Y.
+
+filter X [] [].
+filter X [Y:Z] [Y:Z'] :- X Y, filter X Z Z'.
+filter X [Y:Z] Z' :- not (X Y), filter X Z Z'.
+
+all X [] t.
+all X [H:T] Z :- lift (X H) V, all X T W, and V W Z.
+
+any X [] f.
+any X [H:T] Z :- lift (X H) V, any X T W, or V W Z.
+
+- Grammar
+a [0:X] X.
+b [1:X] X.
+s X X.
+s X Z :- a X Y, s Y V, b V W, s W Z.
+
+bal 0 [].
+bal (s X) C :- add V W X, bal V A, bal W B, append [0:A] [1:B] C.

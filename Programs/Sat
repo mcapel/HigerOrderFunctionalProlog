@@ -1,0 +1,10 @@
+and X Y :- X, Y.
+or X Y :- X.
+or X Y :- Y.
+not X :- X, !, fail.
+not X.
+
+tv t.
+tv f.
+
+sat X Y Z :- tv X, tv Y, Z.

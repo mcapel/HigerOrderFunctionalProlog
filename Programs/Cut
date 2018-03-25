@@ -1,0 +1,46 @@
+s X Y Z :- q X Y Z.
+s a a a. 
+
+q l l l.
+q X Y Z :- i X, j Y, !, k Z.
+
+i b.
+i c.
+j b.
+j c.
+j d.
+k b.
+k c.
+
+-s X Y :- q X Y.
+-s 0 0.
+- 
+-q X Y :- i X, !, j Y.
+- 
+-i 1.
+-i 2.
+-j 1.
+-j 2.
+-j 3.
+
+-a X b :- b X, !. 
+-a X c :- c X, !.
+-a X d.
+-b 1.
+-c 3.
+
+
+-a X :- b X, !, c X. 
+-a X :- d X.
+-b 1.
+-b 4.
+-c 3.
+-d 4.
+
+-a X Y :- b X, !, c Y. 
+-b 1.
+-b 2.
+-b 3.
+-c 1.
+-c 2.
+-c 3.
